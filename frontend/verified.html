@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXTRA | Verified Users</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 36%22><text y=%2232%22 font-size=%2232%22>👁️</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: radial-gradient(#050505, #0b132b);
+      color: #00ffcc;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    form {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 30px;
+      width: 80%;
+      max-width: 400px;
+    }
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      background: #1b263b;
+      color: #00ffcc;
+    }
+    .btn {
+      background: linear-gradient(90deg, #00eaff, #007bff);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #00ffaa, #0099ff);
+    }
+    .card {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      width: 180px;
+      position: relative;
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    #preview {
+      margin-top: 10px;
+      border-radius: 10px;
+      display: none;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+    }
+    .remove-btn {
+      background: linear-gradient(90deg, #ff0044, #ff6600);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      margin-top: 8px;
+      transition: 0.2s;
+    }
+    .remove-btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(90deg, #ff3366, #ff8800);
+    }
+  </style>
+</head>
+<body>
+  <h1>✅ Verified Users (Admin Panel)</h1>
+
+  <form id="userForm" enctype="multipart/form-data">
+    <input type="text" id="name" name="name" placeholder="Name" required /><br />
+    <input type="text" id="role" name="role" placeholder="Role / Department" required /><br />
+    <input type="file" id="photo" name="photo" accept="image/*" required /><br />
+    <img id="preview" alt="Preview" />
+    <button type="submit" class="btn">Add Verified User</button>
+  </form>
+
+  <h2>👥 Registered Users</h2>
+  <div id="userList"></div>
+
+  <a href="index.html" class="btn">🏠 Back to Home</a>
+
+  <script>
+    // 🖼️ Show image preview before upload
+    document.getElementById("photo").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const preview = document.getElementById("preview");
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
+
+    // 🧾 Load existing users
+    async function loadUsers() {
+      const res = await fetch("/api/users");
+      const users = await res.json();
+      const list = document.getElementById("userList");
+      list.innerHTML = "";
+      users.forEach(u => {
+        list.innerHTML += `
+          <div class="card">
+            <img src="${u.photo}" alt="${u.name}" />
+            <h3>${u.name}</h3>
+            <p>${u.role}</p>
+            <button class="remove-btn" onclick="removeUser('${u.name}')">❌ Remove</button>
+          </div>`;
+      });
+    }
+
+    // 💾 Add new user
+    document.getElementById("userForm").onsubmit = async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const res = await fetch("/api/users", { method: "POST", body: formData });
+      if (res.ok) {
+        alert("✅ User added successfully!");
+        loadUsers();
+        e.target.reset();
+        document.getElementById("preview").style.display = "none";
+      } else {
+        alert("⚠️ Failed to add user.");
+      }
+    };
+
+    // ❌ Remove a user
+    async function removeUser(name) {
+      if (!confirm(`Are you sure you want to remove ${name}?`)) return;
+      const res = await fetch(`/api/users/${encodeURIComponent(name)}`, { method: "DELETE" });
+      if (res.ok) {
+        alert(`🗑️ ${name} removed successfully!`);
+        loadUsers();
+      } else {
+        alert("⚠️ Failed to remove user.");
+      }
+    }
+
+    loadUsers();
+  </script>
+</body>
+</html>

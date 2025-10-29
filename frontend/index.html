@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXTRA | Smart Security</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 36%22><text y=%2232%22 font-size=%2232%22>👁️</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: radial-gradient(circle at center, #050505, #0b132b 90%);
+      color: #00ffcc;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      overflow-x: hidden;
+      position: relative;
+      padding: 60px 20px;
+    }
+
+    /* 🌟 Neon corner glow decorations */
+    .corner {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      border: 2px solid #00eaff;
+      opacity: 0.2;
+      z-index: 0;
+    }
+    .corner.top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+    .corner.top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+    .corner.bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+    .corner.bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+    img.logo {
+      width: 110px;
+      filter: drop-shadow(0 0 15px #00eaff);
+      margin-bottom: 15px;
+      z-index: 1;
+      position: relative;
+    }
+
+    img.brand-img {
+      width: 420px;
+      max-width: 85%;
+      border-radius: 15px;
+      margin: 20px auto 40px;
+      display: block;
+      filter: drop-shadow(0 0 25px #00eaff);
+      transition: transform 0.3s ease, filter 0.3s;
+    }
+    img.brand-img:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 35px #00ffaa);
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #00eaff, #007bff);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin: 10px;
+      transition: transform 0.2s, background 0.3s;
+      z-index: 1;
+      position: relative;
+    }
+    .btn:hover {
+      transform: scale(1.08);
+      background: linear-gradient(90deg, #00ffaa, #0099ff);
+    }
+
+    /* 🧠 Info boxes */
+    .info-section {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .info-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.2);
+      box-shadow: 0 0 15px rgba(0,255,255,0.15);
+      border-radius: 15px;
+      padding: 20px;
+      width: 280px;
+      color: #a0e7e5;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .info-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(0,255,255,0.4);
+    }
+
+    .info-box h3 {
+      color: #00ffaa;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00ffaa;
+    }
+
+    footer {
+      margin-top: 60px;
+      color: #007bff;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🔹 Glowing Corners -->
+  <div class="corner top-left"></div>
+  <div class="corner top-right"></div>
+  <div class="corner bottom-left"></div>
+  <div class="corner bottom-right"></div>
+
+  <!-- 👁️ Logo -->
+  <img src="assets/logo.png" alt="NEXTRA Logo" class="logo" />
+
+  <!-- 🖼️ Image that contains the name + tagline -->
+  <img src="assets/image.png" alt="NEXTRA Title Image" class="brand-img" />
+
+  <!-- 🚀 Main Navigation -->
+  <div>
+    <a href="camera.html" class="btn">🎥 View Live Camera</a>
+    <a href="history.html" class="btn">📜 View Access History</a>
+    <a href="verified.html" class="btn">✅ Verified Users</a>
+  </div>
+
+  <!-- 🧠 Info Section -->
+  <div class="info-section">
+    <div class="info-box">
+      <h3>🔐 Is Security Really Secure?</h3>
+      <p>Most systems still rely only on faces or cards — easily fooled by photos, videos, or masks.</p>
+    </div>
+    <div class="info-box">
+      <h3>🧠 Smart Recognition</h3>
+      <p>NEXTRA identifies not just by face — but by movement, behavior, and gait.</p>
+    </div>
+    <div class="info-box">
+      <h3>🎭 Can AI Detect Masks?</h3>
+      <p>Even if the face is hidden, our AI learns from patterns and motion to verify identity accurately.</p>
+    </div>
+    <div class="info-box">
+      <h3>⚡ Real-Time Alerts</h3>
+      <p>Suspicious or unknown entries trigger instant security notifications and logs.</p>
+    </div>
+  </div>
+
+  <footer>👁️ NEXTRA – Where Security Starts to Sense.</footer>
+</body>
+</html>

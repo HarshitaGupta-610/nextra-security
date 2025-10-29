@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 36%22><text y=%2232%22 font-size=%2232%22>👁️</text></svg>">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXTRA | Live Security Scanner</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://docs.opencv.org/4.x/opencv.js"></script>
+
+  <style>
+    body {
+      background: radial-gradient(#050505, #0b132b);
+      color: #00ffcc;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      padding: 30px;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    h1 {
+      text-shadow: 0 0 15px #00eaff;
+    }
+
+    #video {
+      border: 2px solid #00eaff;
+      border-radius: 15px;
+      margin-top: 20px;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    .btn {
+      margin: 10px;
+      background: linear-gradient(90deg, #00eaff, #007bff);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #00ffaa, #0099ff);
+    }
+
+    #status, #result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 255, 200, 0.05);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      backdrop-filter: blur(4px);
+      z-index: 99;
+    }
+
+    .scanning-line {
+      width: 300px;
+      height: 3px;
+      background: #00ffcc;
+      animation: scan 2s infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(-150px); opacity: 0.3; }
+      50% { transform: translateY(150px); opacity: 1; }
+      100% { transform: translateY(-150px); opacity: 0.3; }
+    }
+
+    /* ✅ Access animation overlay */
+    #accessOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .access-text {
+      font-size: 2.5rem;
+      padding: 40px;
+      border-radius: 50%;
+      animation: pulse 1.2s infinite alternate;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 20px #00ffcc; }
+      100% { transform: scale(1.1); box-shadow: 0 0 40px #00ffaa; }
+    }
+
+    .granted {
+      color: #00ffcc;
+      border: 4px solid #00ffcc;
+      background: rgba(0, 255, 150, 0.1);
+    }
+
+    .denied {
+      color: #ff4444;
+      border: 4px solid #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      animation: pulseDenied 1s infinite alternate;
+    }
+
+    @keyframes pulseDenied {
+      0% { transform: scale(1); box-shadow: 0 0 20px #ff4444; }
+      100% { transform: scale(1.1); box-shadow: 0 0 40px #ff2222; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎥 NEXTRA Live Security Scanner</h1>
+  <p>AI-Powered Identity & Behaviour Recognition System</p>
+
+  <video id="video" autoplay playsinline></video>
+
+  <div>
+    <button id="startBtn" class="btn">▶️ Start Scan</button>
+    <button id="saveBtn" class="btn">💾 Save Log</button>
+    <button id="stopBtn" class="btn">🛑 Stop Scan</button>
+    <a href="index.html" class="btn">🏠 Home</a>
+  </div>
+
+  <p id="status">System Idle...</p>
+  <p id="result"></p>
+
+  <!-- scanning overlay -->
+  <div id="overlay">
+    <h2>🔍 Scanning in Progress...</h2>
+    <div class="scanning-line"></div>
+  </div>
+
+  <!-- access overlay -->
+  <div id="accessOverlay"><div id="accessText" class="access-text"></div></div>
+
+  <script>
+    const video = document.getElementById("video");
+    const overlay = document.getElementById("overlay");
+    const accessOverlay = document.getElementById("accessOverlay");
+    const accessText = document.getElementById("accessText");
+    const result = document.getElementById("result");
+    const statusText = document.getElementById("status");
+    let stream, currentScan = null;
+
+    // 1️⃣ Start Scan
+    document.getElementById("startBtn").onclick = async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        overlay.style.display = "flex";
+        statusText.innerText = "🎦 Scanning in progress...";
+
+        setTimeout(() => {
+          overlay.style.display = "none";
+          simulateAIResult();
+        }, 4000);
+      } catch (err) {
+        statusText.innerText = "⚠️ Camera access denied!";
+      }
+    };
+
+    // 2️⃣ Simulate AI Scan Result
+    function simulateAIResult() {
+      const names = ["A. Mehta", "K. Sharma", "S. Patel", "R. Verma", "N. Gupta",
+  "D. Singh", "T. Iyer", "V. Nair", "P. Bose", "M. Khan",
+  "J. Das", "Unknown"];
+      const name = names[Math.floor(Math.random() * names.length)];
+      const gait = (80 + Math.random() * 15).toFixed(1);
+      const auth = (70 + Math.random() * 25).toFixed(1);
+      const accessGranted = name !== "Unknown";
+      const access = accessGranted ? "Granted ✅" : "Denied 🚫";
+
+      currentScan = { name, gait, auth, access, time: new Date().toLocaleString() };
+
+      result.innerHTML = `
+        <strong>Person:</strong> ${name}<br>
+        🧍 Gait: ${gait}%<br>
+        🔒 Authenticity: ${auth}%<br>
+        🔹 Access: ${access}
+      `;
+
+      statusText.innerText = `✅ Scan complete - ${access}`;
+      showAccessOverlay(accessGranted);
+    }
+
+    // ✅ Show fancy Access Overlay
+    function showAccessOverlay(granted) {
+      accessOverlay.style.display = "flex";
+      accessText.className = `access-text ${granted ? "granted" : "denied"}`;
+      accessText.textContent = granted ? "ACCESS GRANTED" : "ACCESS DENIED";
+      setTimeout(() => {
+        accessOverlay.style.display = "none";
+      }, 2000);
+    }
+
+    // 3️⃣ Save Log
+    document.getElementById("saveBtn").onclick = async () => {
+      if (!currentScan) return alert("⚠️ No scan data to save!");
+      try {
+        const res = await fetch("/api/logs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(currentScan),
+        });
+        await res.json();
+        alert("💾 Log saved successfully!");
+      } catch {
+        alert("⚠️ Error saving log.");
+      }
+    };
+
+    // 4️⃣ Stop Scan
+    document.getElementById("stopBtn").onclick = () => {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        statusText.innerText = "📴 Camera stopped.";
+      }
+    };
+  </script>
+</body>
+</html>
+
+

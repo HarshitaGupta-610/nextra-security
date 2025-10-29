@@ -1,0 +1,44 @@
+body.bg {
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at center, #0a0a1f 0%, #01010a 100%);
+  color: #e0e0e0;
+  text-align: center;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.logo { width: 100px; filter: drop-shadow(0 0 8px cyan); }
+.logo-small { width: 60px; filter: drop-shadow(0 0 6px cyan); }
+
+.title { font-size: 3rem; color: cyan; text-shadow: 0 0 10px #0ff; }
+.title-small { font-size: 2rem; color: cyan; margin-bottom: 20px; }
+.tagline { color: #aaa; margin-bottom: 40px; font-style: italic; }
+
+.menu { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+
+.btn {
+  background: linear-gradient(90deg, #00bcd4, #0066ff);
+  border: none;
+  padding: 12px 24px;
+  color: white;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  width: 250px;
+  transition: transform 0.3s;
+}
+.btn:hover { transform: scale(1.05); }
+.btn.disabled { opacity: 0.5; cursor: not-allowed; }
+.status { color: #00e0ff; margin-top: 10px; }
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 80%;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td { padding: 10px; border-bottom: 1px solid #333; }
+th { color: cyan; }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 36%22><text y=%2232%22 font-size=%2232%22>👁️</text></svg>">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXTRA | Access History</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: radial-gradient(#050505, #0b132b);
+      color: #00ffcc;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #333;
+    }
+    th { color: cyan; }
+    .status-granted { color: #00ffcc; font-weight: bold; }
+    .status-alert { color: #ff4444; font-weight: bold; }
+    .btn { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>📜 NEXTRA Access History</h1>
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Gait %</th>
+        <th>Authenticity %</th>
+        <th>Access</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <a href="index.html" class="btn">🏠 Back to Home</a>
+
+  <script>
+    async function loadLogs() {
+      try {
+        const res = await fetch("/api/logs");
+        const logs = await res.json();
+
+        const tbody = document.querySelector("#logTable tbody");
+        tbody.innerHTML = "";
+        logs.forEach(log => {
+          const cls = log.access.includes("Granted") ? "status-granted" : "status-alert";
+          tbody.innerHTML += `
+            <tr>
+              <td>${log.name}</td>
+              <td>${log.gait}</td>
+              <td>${log.auth}</td>
+              <td class="${cls}">${log.access}</td>
+              <td>${log.time}</td>
+            </tr>`;
+        });
+      } catch {
+        alert("⚠️ Could not load logs.");
+      }
+    }
+
+    loadLogs();
+  </script>
+</body>
+</html>
