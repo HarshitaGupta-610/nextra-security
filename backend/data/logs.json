@@ -1,0 +1,37 @@
+[
+  {
+    "name": "A. Verma",
+    "gait": "80.7",
+    "auth": "83.9",
+    "access": "Granted ✅",
+    "time": "10/29/2025, 9:43:09 PM"
+  },
+  {
+    "name": "R. Mehta",
+    "gait": "88.3",
+    "auth": "91.7",
+    "access": "Granted ✅",
+    "time": "10/29/2025, 9:43:33 PM"
+  },
+  {
+    "name": "Unknown",
+    "gait": "80.9",
+    "auth": "89.4",
+    "access": "Denied 🚫",
+    "time": "10/29/2025, 9:48:32 PM"
+  },
+  {
+    "name": "A. Mehta",
+    "gait": "81.8",
+    "auth": "84.8",
+    "access": "Granted ✅",
+    "time": "10/29/2025, 10:07:58 PM"
+  },
+  {
+    "name": "A. Mehta",
+    "gait": "89.1",
+    "auth": "79.6",
+    "access": "Granted ✅",
+    "time": "10/29/2025, 10:16:11 PM"
+  }
+]
